@@ -14,7 +14,7 @@
 
 from __future__ import print_function
 
-from transitionMatrix.estimators import DurationEstimator
+from transitionMatrix.estimators.base import DurationEstimator
 
 
 class KaplanMeierEstimator(DurationEstimator):

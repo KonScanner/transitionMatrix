@@ -15,7 +15,6 @@
 
 """
 run the transitionMatrix test suite
-
 """
 
 import unittest

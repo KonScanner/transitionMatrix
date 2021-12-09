@@ -14,7 +14,6 @@
 
 '''
 module transitionMatrix.utils - helper classes and functions
-
 '''
 
 from __future__ import print_function, division
@@ -27,11 +26,9 @@ from transitionMatrix.utils.converters import frame_to_array
 
 def validate_absorbing_state(dataframe, state):
     """ Validate whether a given state is actually absorbing (there should be no transitions to another state)
-
     :param dataframe: an input data frame
     :param state: the state to validate
     :type state: int
-
     :return: a list of exceptions
     """
 
@@ -76,11 +73,8 @@ def transitions_summary(dataframe):
 def unique_entities(data):
     """
     Identify unique entities in a dataframe
-
     :param data: dataframe. The 'ID' column is used by default
-
     :returns: returns a numpy array
-
     """
     unique_entities = data['ID'].unique()
     return unique_entities
@@ -89,11 +83,8 @@ def unique_entities(data):
 def unique_states(data):
     """
     Identify unique states in a dataframe
-
     :param data: dataframe. The 'State' column is used by default for Compact formats, 'From' column as fallback for Canonical format
-
     :returns: returns a numpy array
-
     """
     try:
         unique_states = data['State'].unique()
@@ -105,11 +96,8 @@ def unique_states(data):
 def total_timestamps(data):
     """
     Count total number  of timestamps in a dataframe
-
     :param data: dataframe. The 'Time' column is used by default
-
     :returns: returns an integer
-
     """
     total_timestamps = data['Time'].count()
     return total_timestamps
@@ -118,11 +106,8 @@ def total_timestamps(data):
 def unique_timestamps(data):
     """
     Identify unique timestamps in a dataframe
-
     :param data: dataframe. The 'Time' column is used by default
-
     :returns: returns a sorted numpy array
-
     """
     unique_timestamps = sorted(data['Time'].unique())
     return unique_timestamps
@@ -130,15 +115,12 @@ def unique_timestamps(data):
 
 def generate_cohort_bounds(data, cohorts):
     """Generate cohort intervals given an input transition dataframe and the desired number of cohorts. The function finds the range of timestamps and divides it equally
-
     :param data: a pandas dataframe
     :param cohorts:  the number of cohorts
     :type cohorts: int
     :return: cohort_bounds
     :return: dt
-
     .. warning:: the Time column must be in float format
-
     """
     # Find the temporal range of observed event times
     t_min = data['Time'].min()
@@ -156,25 +138,19 @@ def generate_cohort_bounds(data, cohorts):
 def generate_event_dict(data, dt, cohort_bounds):
     """
     Loop over all events and construct a dictionary in the following format:
-
     .. code::
-
         event_dict = {
           (entity_id, cohort interval) : [(time, state), ..., (time, state)]
           (entity_id, cohort interval) : (time, state), ..., (time, state)]
         }
-
     * Create a unique key as per (entity, interval)
     * Find the interval of each event (the cohort it belongs it)
     * Add (time, state) pairs as variable length list
-
     This data structure allows applying arbitrary state assignment to each cohort interval
-
     :param data: a pandas dataframe
     :param dt: the cohort interval
     :param cohort_bounds: the boundaries of the cohort intervals
     :return: dict
-
     """
 
     initial_time = cohort_bounds[0]
@@ -209,17 +185,13 @@ def generate_event_dict(data, dt, cohort_bounds):
 def remove_stale_events(data):
     """
     Parse an event dictionary and remove transitions to the same state:
-
     .. code::
-
         event_dict = {
           (entity_id, cohort interval) : [(time, state), ..., (time, state)]
           (entity_id, cohort interval) : (time, state), ..., (time, state)]
         }
-
     :param data: a pandas dataframe
     :return: dict
-
     """
     event_dict = {}
     for event_key in data.keys():
@@ -241,7 +213,6 @@ def remove_stale_events(data):
 def bin_timestamps(sorted_data, cohorts, output_format=0, remove_stale=False):
     """
     Bin timestamped data in a dataframe so as to have ingoing and outgoing states per cohort interval
-
     :param data: the dataframe to cohort
     :param cohorts: the number of cohorts
     :param output_format: how to structure the outputs (0=cohorts, 1=event_list)
@@ -250,15 +221,10 @@ def bin_timestamps(sorted_data, cohorts, output_format=0, remove_stale=False):
     :type dimension: int
     :type output_format: int
     :type remove_stale: bool
-
     :returns: returns dataframe with cohorted data and cohort intervals
-
     .. note:: The 'ID' and 'Time' column labels are used by default.
-
     .. warning:: Cohorting is a 'lossy' operation: Timestamps are discretised (binned) and any intermediate state transitions are lost.
-
     .. warning:: The data must be sorted already
-
     """
 
     # STEP 1

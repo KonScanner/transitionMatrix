@@ -14,7 +14,6 @@
 
 
 """ A collection of state space descriptions from recognized public credit rating scales. The list includes the following: Predefined state spaces (include CQS mappings)
-
     - AM Best Europe-Rating Services Ltd.
     - ARC Ratings S.A.
     - Cerved Rating Agency S.p.A.
@@ -24,11 +23,8 @@
     - Moody’s Investors Service
     - Scope Ratings AG
     - Standard & Poor’s Ratings Services
-
   There are also mappings between major rating scales (e.g.SnP_Fitch2Moodys)
-
   .. warning:: The mappings are nominal (as defined by regulation or convention) and do not necessarily indicate conceptual or statistical alignement!
-
 """
 
 from transitionMatrix.statespaces.statespace import StateSpace

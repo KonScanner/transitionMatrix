@@ -14,7 +14,6 @@
 
 
 """ Run all examples for a high-level test that everything is working with the current version
-
 """
 
 import os

@@ -17,16 +17,14 @@ from __future__ import print_function
 import numpy as np
 
 import transitionMatrix as tm
-from transitionMatrix.estimators import DurationEstimator
+from transitionMatrix.estimators.base import DurationEstimator
 
 
 class AalenJohansenEstimator(DurationEstimator):
 
     """
     Class for implementing the Aalen-Johansen estimator for the transition matrix
-
     Documentation: `Aalen-Johansen Estimator <https://www.openriskmanual.org/wiki/Aalen-Johansen_Estimator>`_
-
     """
 
     def __init__(self, states=None):
@@ -43,36 +41,26 @@ class AalenJohansenEstimator(DurationEstimator):
         Parameters
         ----------
         data : dataframe - The data to use for the estimation provided in a pandas data frame in long format,with one row per observed transition. The data frame must contain the following columns (or pass a label object that will assign accordingly:
-
             * ID: A unique entity identification number
             * TIME Time when a transition occurs
             * FROM: State from where a transition occurs
             * TO: State to which a transition occurs
-
         labels: an optional dictionary for relabeling column names if those deviate from the convention
-
             * TODO constraint possible transitions (absorbing states)
             * TODO censored data
             * TODO partial dates
             * TODO covariance calculation
             * TODO confidence intervals
-
         Returns
         -------
         etm.values : estimated empirical transition matrix throughout the observed interval. This is a three dimensional array object (From State, To State, Timepoint)
         observation_times: a list of observation times etm.observation_times
-
-
         * TODO Store counts as well as frequencies
         * TODO Optional Binning of close observation times
-
-
         .. note::
             The input data MUST be pre-sorted in ascending time order. This is easily done using pandas functionality.
-
         References
         ----------
-
         """
 
         if labels is not None:

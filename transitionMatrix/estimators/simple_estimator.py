@@ -15,16 +15,14 @@
 from __future__ import print_function
 import numpy as np
 
-from transitionMatrix.estimators import BaseEstimator
+from transitionMatrix.estimators.base import BaseEstimator
 import statsmodels.stats.proportion as st
 
 
 class SimpleEstimator(BaseEstimator):
     """
     Class for implementing a simple estimator suitable for single period transitions
-
     This is useful for testing, getting a first feel about the transition landscape.
-
     """
 
     def __init__(self, states=None, ci=None):
@@ -43,22 +41,18 @@ class SimpleEstimator(BaseEstimator):
         ----------
         data : array-like
             The data to use for the estimation
-
         Returns
         -------
         matrix : estimated transition matrix
         confint_lower: lower confidence interval
         confint_upper: upper confidence interval
-
         Notes
         ------
-
         * loop over data rows
         * expected format is (id, state_in, state_out)
         * calculate population count N^i_k per state i
         * calculate migrations count N^{ij}_{kl} from i to j
         * calculate transition matrix as ratio T^{ij}_{kl} = N^{ij}_{kl} / N^i_k
-
         """
 
         # In the simple estimator all events are part of the same cohort

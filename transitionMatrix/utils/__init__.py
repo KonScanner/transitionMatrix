@@ -14,7 +14,6 @@
 
 """ This module contains various helper classes and functions that do not fit
 into any of the main modules of the library
-
 """
 
 from __future__ import print_function, division
@@ -25,12 +24,10 @@ from .converters import *
 
 def print_matrix(A, format_type='Standard', accuracy=2):
     """ Pretty print a matrix
-
     :param format_type: formatting options (Standard, Percent)
     :type format_type: str
     :param accuracy: number of decimals to display
     :type accuracy: int
-
     """
     for s_in in range(A.shape[0]):
         for s_out in range(A.shape[1]):

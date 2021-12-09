@@ -40,14 +40,11 @@ def frame_to_array(dataframe):
 
 def datetime_to_float(dataframe, time_column='Time', format=None):
     """datetime_to_float() converts dates from string format to the canonical float format
-
     :param time_column: the column label of the observation times
     :param dataframe: Pandas dataframe with dates in string format
     :return: Pandas dataframe with dates in float format
     :rtype: object
-
     .. note:: The date string must be recognizable by the pandas to_datetime function.
-
     """
 
     dataframe[time_column] = dataframe[time_column].apply(
@@ -74,10 +71,8 @@ def datetime_to_float(dataframe, time_column='Time', format=None):
 
 def to_canonical(dataframe):
     """to_canonical() converts a dataframe that is in compact form into a canonical form
-
     :param dataframe:
     :return: dataframe
-
     """
 
     event_count = dataframe.shape[0]
@@ -114,10 +109,8 @@ def to_canonical(dataframe):
 
 def to_compact(dataframe):
     """to_compact() converts a dataframe that is in canonical form into a compact form
-
     :param dataframe:
     :return: dataframe
-
     """
 
     data = dataframe.drop(['From'], axis=1)

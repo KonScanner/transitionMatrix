@@ -24,18 +24,14 @@ from scipy import stats as stats
 def exponential_transitions(statespace, n, sample, rate, data_format='Compact'):
     """
     Generate continuous time events from exponential distribution and uniform sampling from state space. Suitable for testing cohorting algorithms and duration based estimators.
-
     The data are sorted by entity ID, then by time of occurrence T. The first entry per entity indicates the state up to that timepoint. The format is a sequence of triples (ID, Time, State)
-
     :param statespace: The state space to use for the simulation
     :param int n: The number of distinct entities to simulate
     :param int sample: The number of events to simulate
     :param float rate: The event rate
     :return: transition events
     :rtype: pandas dataframe
-
     .. note:: May generate successive events in the same state
-
     """
     states = statespace.get_states()
     data = []
@@ -54,14 +50,12 @@ def exponential_transitions(statespace, n, sample, rate, data_format='Compact'):
 def markov_chain(statespace, transitionmatrix, n, timesteps):
     """
     Generate discrete events from a markov chain matrix in Compact data format. Suitable for testing cohort based estimators (each time step is a cohort)
-
     :type statespace: The state space to use for the simulation
     :type transitionmatrix: The transitionMatrix to use for the simulation
     :param int n: The number of distinct entities to simulate
     :param int timesteps: The number of timesteps to simulate (including initial state)
     :return: the message id
     :rtype: pandas dataframe
-
     """
     states = statespace.get_states()
     matrix = transitionmatrix
@@ -84,7 +78,6 @@ def markov_chain(statespace, transitionmatrix, n, timesteps):
 def long_format(statespace, mymatrix, n, timesteps, mode='Canonical'):
     """
     Generate continuous events from a markov chain matrix in long data format. Suitable for testing duration based estimators
-
     :param statespace: The state space to use for the simulation
     :type statespace: object
     :param mymatrix: The transition matrix to use for the simulation
@@ -97,12 +90,9 @@ def long_format(statespace, mymatrix, n, timesteps, mode='Canonical'):
     :type mode: str
     :return: generated dataset
     :rtype: pandas dataframe
-
     .. note: The observation time within timesteps is calculated using a uniform \
     distribution assumption
-
     .. todo: Generate initial distribution of entities that is non-uniform in states
-
     """
     states = statespace.get_states()
     matrix = mymatrix
@@ -188,7 +178,6 @@ def long_format(statespace, mymatrix, n, timesteps, mode='Canonical'):
 def deterministic(sequences, replication_count):
     """
     Generate a transition dataset from a given sequence. Each element in the list is a different transition profile through the state space starting with the initial observation. Replicating the sequences a number of times generates a statistical sample (each replication being a different entity). This allows controlled testing.
-
     :param sequences: a list of sequences to replicate
     :param replication_count: the number of replications
     :return:
@@ -209,13 +198,10 @@ def deterministic(sequences, replication_count):
 def portfolio_labels(statespace, n):
     """
     Generate a collection of credit rating states emulating a snapshot of portfolio data. Suitable for mappings and transformations of credit rating states
-
     :type statespace: The state space to use for the simulation
     :param int n: The number of distinct entities to generate
     :return: the collection
     :rtype: list
-
-
     """
     labels = [x[1] for x in statespace.definition]
     collection = np.random.choice(labels, n)

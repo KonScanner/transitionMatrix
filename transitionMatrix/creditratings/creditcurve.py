@@ -13,9 +13,7 @@
 # limitations under the License.
 
 """ This module provides objects related to credit curves
-
 * CreditCurve_ implements the functionality of a collection of credit (default curves)
-
 """
 
 import numpy as np
@@ -25,34 +23,25 @@ import pandas as pd
 class CreditCurve(np.matrix):
     """ The _`CreditCurve` object implements a typical collection of `credit curves <https://www.openriskmanual.org/wiki/Credit_Curve>`_.
     The class inherits from numpy matrices and implements additional properties specific to curves.
-
     """
 
     def __new__(cls, values=None, json_file=None, csv_file=None):
         """ Create a new credit curve set. Different options for initialization are:
-
         * providing values as a list of list
         * providing values as a numpy array  (The rows are the different curves, the columns are different periods)
         * loading from a csv file
         * loading from a json file
-
         Without data, a default identity matrix is generated with user specified dimension
-
         :param values: initialization values
         :param json_file: a json file containing transition matrix data
         :param csv_file: a csv file containing transition matrix data
         :type values: list of lists or numpy array
         :returns: returns a CreditCurve object
         :rtype: object
-
         .. note:: The initialization in itself does not validate if the provided values form indeed a credit curve
-
         :Example:
-
         .. code-block:: python
-
             A = tm.CreditCurve(values=[[0.1, 0.2, 0.3], [0.2, 0.6, 0.8], [0.01, 0.02, 0.06]])
-
         """
         obj = None
         if values is not None:
@@ -75,7 +64,6 @@ class CreditCurve(np.matrix):
     def to_json(self, file):
         """
         Write credit curves to file in json format
-
         :param file: json filename
         """
 
@@ -85,7 +73,6 @@ class CreditCurve(np.matrix):
     def to_csv(self, file):
         """
         Write credit curves to file in csv format
-
         :param file: csv filename
         """
 
@@ -102,13 +89,10 @@ class CreditCurve(np.matrix):
 
     def validate(self, accuracy=1e-3):
         """ Validate required properties of a credit curve set. The following are checked
-
         1. check that all values are probabilities (between 0 and 1)
         2. check that values are non-decreasing
-
         :param accuracy: accuracy level to use for validation
         :type accuracy: float
-
         :returns: List of tuples with validation messages
         """
         validation_messages = []
@@ -139,33 +123,25 @@ class CreditCurve(np.matrix):
 
     def hazard_curve(self):
         """ Compute hazard rates
-
         .. Todo:: Compute hazard rates
-
         :return: TODO
-
         """
         pass
 
     def characterize(self):
         """ Analyse or classify a credit curve according to its properties
-
         * slope of hazard rate
-
         .. Todo:: Further characterization
-
         """
 
         pass
 
     def print_curve(self, format_type='Standard', accuracy=2):
         """ Pretty print a set of credit curves
-
         :param format_type: formatting options (Standard, Percent)
         :type format_type: str
         :param accuracy: number of decimals to display
         :type accuracy: int
-
         """
         for s_in in range(self.shape[0]):
             for s_out in range(self.shape[1]):

@@ -18,15 +18,13 @@ import numpy as np
 import statsmodels.stats.proportion as st
 
 import transitionMatrix
-from transitionMatrix.estimators import BaseEstimator
+from transitionMatrix.estimators.base import BaseEstimator
 
 
 class CohortEstimator(BaseEstimator):
     """
     Class for implementing a Cohort Estimator for the transition matrix
-
     Documentation: `Cohort Estimator <https://www.openriskmanual.org/wiki/Cohort_Estimator>`_
-
     """
 
     def __init__(self, cohort_bounds=None, states=None, ci=None):
@@ -50,27 +48,20 @@ class CohortEstimator(BaseEstimator):
         Parameters
         ----------
         data : dataframe - The data to use for the estimation (in sorted by ID in compact format)
-
         labels: an optional dictionary for relabeling column names
-
         Returns
         -------
         matrix_set : An estimated transition matrix set
-
         Notes
         ------
-
         * loop over data rows (id, timepoint, state)
         * at least two distinct timepoints are required (initial and final)
         * calculate population count N^i_k per state i per timepoint k
         * calculate migrations count N^{ij}_{kl} from i to j from timepoint k to timepoint l
         * calculate transition matrix as ratio T^{ij}_{kl} = N^{ij}_{kl} / N^i_k
         * calculate also count-averaged matrix
-
         References
         ----------
-
-
         """
 
         # Allow for flexible labelling for dataframe columns

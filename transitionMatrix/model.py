@@ -13,11 +13,9 @@
 # limitations under the License.
 
 """ This module provides the core transition matrix objects
-
 * TransitionMatrix_ implements the functionality of a single-period transition matrix
 * TransitionMatrixSet_ provides a container for a multi-period transition matrix collection
 * TODO: EmpiricalTransitionMatrix implementing a continuously observed transition matrix
-
 """
 
 import json
@@ -32,12 +30,9 @@ from scipy.linalg import logm, expm
 
 def matrix_exponent(generator, t=1.0):
     """ Compute the exponent of a transition matrix generator
-
     :param t: the timescale parameter
     :type t: float
-
     :Example:
-
     A = G.exponent()
     """
     exponent = tm.TransitionMatrix(expm(t * generator))
@@ -46,46 +41,33 @@ def matrix_exponent(generator, t=1.0):
 
 class TransitionMatrix(np.matrix):
     """ The _`TransitionMatrix` object implements a typical (one period) `transition matrix <https://www.openriskmanual.org/wiki/Transition_Matrix>`_.
-
     The class inherits from numpy matrices and implements additional properties specific to transition matrices. It forms the building block of the TransitionMatrixSet_ which holds a collection of matrices in increasing temporal order
-
     .. note::
         numpy.matrix will be `deprecated at some point <https://numpy.org/doc/stable/reference/generated/numpy.matrix.html>`_
-
     """
 
     def __new__(cls, values=None, dimension=2, json_file=None, csv_file=None, states=None):
         """ Create a new transition matrix. Different options for initialization are:
-
         * providing values as a list of list
         * providing values as a numpy array
         * loading from a csv file # TODO change the API to file + format
         * loading from a json file # TODO change the API to file + format
-
         Without data, a default identity matrix is generated with user specified dimension
-
         :param values: initialization values
         :param dimension: matrix dimensionality (default is 2)
         :param json_file: a json file containing transition matrix data
         :param csv_file: a csv file containing transition matrix data
         :param states: an optional state space  object
-
         :type values: list of lists or numpy array
         :type dimension: int
         :type csv_file: str
         :type json_file: str
-
         :returns: returns a TransitionMatrix object
         :rtype: object
-
         .. note:: The initialization in itself does not validate that the provided values form indeed a transition matrix
-
         :Example:
-
         .. code-block:: python
-
             A = tm.TransitionMatrix(values=[[0.6, 0.2, 0.2], [0.2, 0.6, 0.2], [0.2, 0.2, 0.6]])
-
         """
         if values is not None:
             # Initialize with given values
@@ -112,12 +94,9 @@ class TransitionMatrix(np.matrix):
     def row(self, i):
         """
         Return a row of matrix values
-
         :param i: row index
         :type i: int
-
         :return list
-
         """
         row = []
         matrix_size = self.shape[0]
@@ -128,7 +107,6 @@ class TransitionMatrix(np.matrix):
     def to_json(self, file):
         """
         Write transition matrix to file in json format
-
         :param file: json filename
         """
 
@@ -138,7 +116,6 @@ class TransitionMatrix(np.matrix):
     def to_csv(self, file):
         """
         Write transition matrix to file in csv format
-
         :param file: csv filename
         """
 
@@ -156,7 +133,6 @@ class TransitionMatrix(np.matrix):
     def fix_rowsums(self):
         """
         If the row sum is not identically unity, correct the diagonal element to enforce
-
         """
 
         matrix = self
@@ -169,7 +145,6 @@ class TransitionMatrix(np.matrix):
     def fix_negativerates(self):
         """
         If a matrix entity is below zero, set to zero and correct the diagonal element to enforce
-
         """
 
         matrix = self
@@ -188,14 +163,11 @@ class TransitionMatrix(np.matrix):
 
     def validate(self, accuracy=1e-3):
         """ Validate required properties of a transition matrix. The following are checked
-
         1. check squareness
         2. check that all values are probabilities (between 0 and 1)
         3. check that all rows sum to one
-
         :param accuracy: accuracy level to use for validation
         :type accuracy: float
-
         :returns: List of tuples with validation messages
         """
         validation_messages = []
@@ -229,12 +201,9 @@ class TransitionMatrix(np.matrix):
 
     def generator(self, t=1.0, fix_negative=False):
         """ Compute the generator of a transition matrix
-
         :param t: the timescale parameter
         :type t: float
-
         :Example:
-
         G = A.generator()
         """
         generator = logm(self) / t
@@ -256,12 +225,9 @@ class TransitionMatrix(np.matrix):
 
     def power(self, n=1):
         """ Raise a transition matrix to a desired power
-
         :param n: the desired power
         :type n: int
-
         :Example:
-
         B = A.power(10)
         """
         a = self
@@ -272,9 +238,7 @@ class TransitionMatrix(np.matrix):
 
     def characterize(self):
         """ Analyse or classify a transition matrix according to its properties
-
         * diagonal dominance
-
         .. Todo:: Further characterization
         """
 
@@ -296,21 +260,18 @@ class TransitionMatrix(np.matrix):
 
     def generate_random_matrix(self):
         """
-
         .. Todo:: Implement matrix generation subject to various constraints
         """
         pass
 
     def print_matrix(self, format_type='Standard', accuracy=2, labels=False):
         """ Pretty print a transition matrix
-
         :param format_type: formatting options (Standard, Percent)
         :type format_type: str
         :param accuracy: number of decimals to display
         :type accuracy: int
         :param labels: use state space labels to annotate matrix printout
         :type labels: bool
-
         """
 
         if labels:
@@ -330,16 +291,12 @@ class TransitionMatrix(np.matrix):
 
     def remove(self, state, method):
         """ Remove a transition matrix state and distribute its probability mass to other states according to a prescribed method
-
         :param state: the state to remove
         :param method: the method to use
         :type state: int
         :type method: str
-
         :returns: a transition matrix
-
         .. todo:: Implement additional methods, for example a conservative approach where each NR is actually a default
-
         """
         new_matrix = tm.TransitionMatrix(dimension=self.shape[0] - 1)
         states = list(range(self.shape[0]))
@@ -359,54 +316,38 @@ class TransitionMatrix(np.matrix):
 
 class TransitionMatrixSet(object):
     """  The _`TransitionMatrixSet` object stores a family of TransitionMatrix_ objects as a time ordered list. Besides storage it allows a variety of simultaneous operations on the collection of matrices
-
-
     """
 
     def __init__(self, dimension=2, values=None, periods=1, temporal_type=None, method=None, json_file=None,
                  csv_file=None):
         """ Create a new matrix set. Different options for initialization are:
-
         * providing values as a list of list
         * providing values as a numpy array
         * loading from a csv file
         * loading from a json file
-
         Without data, a default identity matrix is generated with user specified dimension
-
         :param values: initialization values
         :param dimension: matrix dimensionality (default is 2)
         :param method: the method to use for generating the set (Copy, Power, As-Is)
         :param periods: List with the timesteps of matrix observations
         :param temporal_type: matrix dimensionality (default is 2)
-
         * Incremental: Each period matrix reflects transitions for that period
         * Cumulative: Each period matrix reflects cumulative transitions from start to that period
-
         :param json_file: a json file containing transition matrix data
         :param csv_file: a csv file containing transition matrix data
-
         :type values: list of lists or numpy array
         :type dimension: int
         :type temporal_type: str
         :type json_file: str
         :type csv_file: str
-
         :returns: returns a TranstionMatrix Set object
         :rtype: object
-
         .. note:: The initialization in itself does not validate if the provided values form indeed a transition matrix set
-
         :Example:
-
         Instantiate a transition matrix set directly using a list of matrices
-
         .. code-block:: python
-
             C_Vals = [[[0.75, 0.25], [0.0, 1.0]],  [[0.75, 0.25], [0.0, 1.0]]]
-
             C_Set = tm.TransitionMatrixSet(values=C_Vals, temporal_type='Incremental')
-
         """
 
         self.dimension = dimension
@@ -506,8 +447,6 @@ class TransitionMatrixSet(object):
 
     def __mul__(self, scale):
         """ Scale all entries of the set by a factor
-
-
         """
         scaled = self
         val_set = []
@@ -519,7 +458,6 @@ class TransitionMatrixSet(object):
 
     def validate(self):
         """ Validate transition matrix set (validating individual entries)
-
         :returns: List of tuples with validation messages
         """
         validation_messages = []
@@ -536,7 +474,6 @@ class TransitionMatrixSet(object):
 
     def cumulate(self):
         """ Cumulate a transition matrix set from an incremental set
-
         """
         if self.temporal_type is 'Cumulative':
             print("Transition Matrix Set is already cumulated")
@@ -557,7 +494,6 @@ class TransitionMatrixSet(object):
 
     def remove(self, state, method):
         """ remove a transition matrix state and distribute its probability to other states according to a prescribed method. The method calls the remove method for each individual matrix of the set
-
         """
         updated = self
         val_set = []
@@ -569,7 +505,6 @@ class TransitionMatrixSet(object):
 
     def incremental(self):
         """ Create an incremental transition matrix set from a cumulative set
-
         """
         if self.temporal_type is 'Incremental':
             print("Transition Matrix Set is already incremental")
@@ -592,15 +527,12 @@ class TransitionMatrixSet(object):
 
     def print_matrix(self, format_type='Standard', accuracy=2, period=None):
         """ Pretty print the entire Transition Matrix Set
-
         :param format_type is the print format
         :param accuracy number of significant digits
         :param period which to print (default is all)
-
         :type format_type str
         :type accuracy int
         :type period int
-
         """
         if period:
             entry = self.entries[period]
@@ -643,7 +575,6 @@ class TransitionMatrixSet(object):
     def to_xlsx(self, file=None):
         """
         .. todo:: Store the matrix set in an xlsx sheet
-
         :param file:
         :return:
         """
@@ -652,9 +583,7 @@ class TransitionMatrixSet(object):
     def default_curves(self, rating):
         """ Calculate the incremental probability of entering an absorbing state,
         and the corresponding cumulative probabilities, hazard rates and survival rates
-
         .. Todo:: Make absorbing state an attribute of Matrix and MatrixSet
-
         """
 
         # Default state hardwired to be highest matrix element
@@ -680,7 +609,6 @@ class TransitionMatrixSet(object):
 
     def default_curve_set(self):
         """ Calculate the cumulative probabilities (credit curves) for all ratings
-
         """
         Default = self.dimension - 1
         values = []
@@ -696,49 +624,34 @@ class TransitionMatrixSet(object):
 
 class EmpiricalTransitionMatrix(object):
     """The EmpiricalTransitionMatrix object stores a full continuously observed Transition Matrix. Its main utility is to store matrices estimated using duration methods
-
     .. warning:: not implemented / used yet
-
     .. note::  The EmpiricalTransitionMatrix object is different from the TransitionMatrixSet in that it stores detailed event time of observations and the transition densities in addition to the transition probabilities
-
     .. note:: An EmpiricalTransitionMatrix can be converted into a TransitionMatrixSet by sampling on a temporal grid (but not vice-versa)
-
-
     """
 
     def __init__(self, dimension=2, values=None, observation_times=None, json_file=None,
                  csv_file=None):
         """ Create a new probability matrix. Different options for initialization are:
-
         * providing values as a 3D numpy array of signature (S, S, T) and observation times as a list or numpy array of length T
         * loading from a csv file
         * loading from a json file
-
         Without data, a default identity matrix is generated with user specified dimension
-
         :param values: initialization values
         :param dimension: matrix dimensionality (default is 2)
         :param observation_times: List with the timesteps (support) of transition observations
         :param json_file: a json file containing transition matrix data
         :param csv_file: a csv file containing transition matrix data
-
         :type values: 3D numpy array
         :type dimension: int
         :type observations: int
         :type json_file: str
         :type csv_file: str
-
         :returns: returns a EmpiricalTransitionMatrix object
         :rtype: object
-
         .. note:: The initialization in itself does not validate if the provided values form indeed a transition matrix set
-
         :Example:
-
         Instantiate a transition probability matrix
-
         .. code-block:: python
-
         """
 
         self.values = values
