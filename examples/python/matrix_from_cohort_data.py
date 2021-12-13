@@ -26,7 +26,6 @@ import pandas as pd
 import pprint as pp
 
 import transitionMatrix as tm
-source_path = "/home/kkombos-personal/Documents/Github/transitionMatrix/"
 
 dataset_path = source_path + "datasets/"
 

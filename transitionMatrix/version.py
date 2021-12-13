@@ -1,3 +1,2 @@
-__version__ = '0.4.8'
-
+__version__ = '1.0.0' # modified
 ver = __version__
