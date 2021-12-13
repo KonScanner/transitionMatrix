@@ -18,10 +18,9 @@ import matplotlib.pyplot as plt
 from matplotlib.sankey import Sankey
 import numpy as np
 import pandas as pd
-
 import transitionMatrix as tm
-from transitionMatrix import source_path
 from transitionMatrix.estimators import cohort_estimator as es
+from transitionMatrix import source_path
 from transitionMatrix.creditratings.creditsystems import Generic_SS
 
 
@@ -29,7 +28,6 @@ from transitionMatrix.creditratings.creditsystems import Generic_SS
 Example workflows using transitionMatrix to generate visualizations of migration phenomena
 
 """
-
 dataset_path = source_path + "datasets/"
 example = 5
 

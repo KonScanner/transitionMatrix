@@ -18,14 +18,15 @@ Example workflows using transitionMatrix to estimate a transition matrix from da
 
 """
 
+from transitionMatrix.utils.preprocessing import transitions_summary
+from transitionMatrix.creditratings.creditsystems import Generic_SS
+from transitionMatrix.estimators import cohort_estimator as es
+from transitionMatrix import source_path
 import pandas as pd
 import pprint as pp
 
 import transitionMatrix as tm
-from transitionMatrix import source_path
-from transitionMatrix.estimators import cohort_estimator as es
-from transitionMatrix.creditratings.creditsystems import Generic_SS
-from transitionMatrix.utils.preprocessing import transitions_summary
+source_path = "/home/kkombos-personal/Documents/Github/transitionMatrix/"
 
 dataset_path = source_path + "datasets/"
 
@@ -55,7 +56,8 @@ if example == 3:
     print(myState.get_state_labels())
 
     print("> Load Dataset")
-    data = pd.read_csv(dataset_path + 'synthetic_data4.csv', dtype={'State': str})
+    data = pd.read_csv(dataset_path + 'synthetic_data4.csv',
+                       dtype={'State': str})
 
     print("> Transitions Summary")
     print(80*'-')
@@ -69,7 +71,8 @@ if example == 3:
     # compute confidence interval using goodman method at 95% confidence level
     print("> Cohort Estimator")
     print(80*'-')
-    myEstimator = es.CohortEstimator(states=myState, ci={'method': 'goodman', 'alpha': 0.05})
+    myEstimator = es.CohortEstimator(
+        states=myState, ci={'method': 'goodman', 'alpha': 0.05})
     result = myEstimator.fit(sorted_data)
 
     # Print confidence intervals
@@ -77,21 +80,23 @@ if example == 3:
     myEstimator.summary()
 
     # Print the estimated results
-    myMatrixSet = tm.TransitionMatrixSet(values=result, temporal_type='Incremental')
+    myMatrixSet = tm.TransitionMatrixSet(
+        values=result, temporal_type='Incremental')
     # print(myMatrixSet.temporal_type)
     print("> Print Estimated Matrix Set")
     myMatrixSet.print_matrix()
 
 elif example == 2:
     # Example 2: IFRS 9 Style Migration Matrix
-        # Format: discrete time grid (already arranged in cohorts)
+    # Format: discrete time grid (already arranged in cohorts)
 
     # Step 1
     # Load the data set into a pandas frame
     # Make sure state is read as a string and not as integer
     # Fifth synthetic data example: IFRS 9 Migration Matrix
     print(">>> Step 1: Data Loading")
-    data = pd.read_csv(dataset_path + 'synthetic_data5.csv', dtype={'State': str})
+    data = pd.read_csv(dataset_path + 'synthetic_data5.csv',
+                       dtype={'State': str})
     sorted_data = data.sort_values(['ID', 'Time'], ascending=[True, True])
     # Data is a pandas frame, all methods are available
     print(sorted_data.describe())
@@ -109,7 +114,8 @@ elif example == 2:
     # Estimate matrices using method of choice
     # compute confidence interval using goodman method at 95% confidence level
     print(">>> Step 3: Estimation")
-    myEstimator = es.CohortEstimator(states=myState, ci={'method': 'goodman', 'alpha': 0.05})
+    myEstimator = es.CohortEstimator(
+        states=myState, ci={'method': 'goodman', 'alpha': 0.05})
     # myMatrix = matrix.CohortEstimator(states=myState)
     result = myEstimator.fit(sorted_data)
     myEstimator.summary()
@@ -120,22 +126,26 @@ elif example == 2:
     # Step 4
     # Review full set of numerical results
     print(">>> Step 5")
-    myMatrixSet = tm.TransitionMatrixSet(values=result, temporal_type='Incremental')
+    myMatrixSet = tm.TransitionMatrixSet(
+        values=result, temporal_type='Incremental')
     print(myMatrixSet.temporal_type)
     myMatrixSet.print_matrix()
 
 elif example == 1:
     # Example 1: Simplest Absorbing Case for validation
-    data = pd.read_csv(dataset_path + 'synthetic_data6.csv', dtype={'State': str})
+    data = pd.read_csv(dataset_path + 'synthetic_data6.csv',
+                       dtype={'State': str})
     sorted_data = data.sort_values(['ID', 'Time'], ascending=[True, True])
     myState = tm.StateSpace()
     myState.generic(2)
     print(80 * '-')
     print('State Space Validation:')
     print(myState.validate_dataset(dataset=sorted_data))
-    myEstimator = es.CohortEstimator(states=myState, ci={'method': 'goodman', 'alpha': 0.05})
+    myEstimator = es.CohortEstimator(
+        states=myState, ci={'method': 'goodman', 'alpha': 0.05})
     result = myEstimator.fit(sorted_data)
-    myMatrixSet = tm.TransitionMatrixSet(values=result, temporal_type='Incremental')
+    myMatrixSet = tm.TransitionMatrixSet(
+        values=result, temporal_type='Incremental')
     print(80 * '-')
     print('Sample Estimated Matrix (Count Format, All Cohorts:')
     myEstimator.print(select='Counts')

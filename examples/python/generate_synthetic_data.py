@@ -27,10 +27,10 @@ The subsequent three examples product cohort type data using markov chain simula
 import pandas as pd
 import transitionMatrix as tm
 from transitionMatrix.creditratings.predefined import Generic, TestCase, SP02NR
-from transitionMatrix import source_path
 from transitionMatrix.generators import dataset_generators
+from transitionMatrix import source_path
 
-dataset_path = source_path + "datasets/"
+dataset_path = source_path + "datasets/" 
 
 # DURATION TYPE DATASETS (Compact format)
 # 1-> This dataset simulates single entity transitions

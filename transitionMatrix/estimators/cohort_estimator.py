@@ -75,14 +75,14 @@ class CohortEstimator(BaseEstimator):
             timestep_label = 'Time'
 
         # Old way of enumerating cohort intervals was using labels
-        # cohort_labels = data[timestep_label].unique()
-        # cohort_dim = len(cohort_labels) - 1
+        cohort_labels = data[timestep_label].unique()
+        cohort_dim = len(cohort_labels) - 1
 
         # The size of the state space
         state_dim = self.states.cardinality
         # The number of cohorts is the number of intervals
         # Minimally two (initial and final)
-        cohort_dim = len(self.cohort_bounds) - 1
+        #cohort_dim = len(self.cohort_bounds) - 1
         event_count = data[id_label].count()
 
         # store data in 1d arrays for faster processing
